@@ -46,7 +46,7 @@ class Agent(ABC):
         agent_name: str,
         ROOT_URL: str,
         record: bool,
-        arc_env: EnvironmentWrapper,
+        arc_env: Optional[EnvironmentWrapper] = None,
         tags: Optional[list[str]] = None,
     ) -> None:
         self.ROOT_URL = ROOT_URL

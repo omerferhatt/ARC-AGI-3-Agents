@@ -6,6 +6,7 @@ import os
 from threading import Thread
 from typing import TYPE_CHECKING, Optional, Type
 
+import requests
 from arc_agi import Arcade, OperationMode
 from arc_agi.scorecard import EnvironmentScorecard
 
@@ -51,6 +52,8 @@ class Swarm:
             "X-API-Key": os.getenv("ARC_API_KEY", ""),
             "Accept": "application/json",
         }
+        self._session = requests.Session()
+        self._session.headers.update(self.headers)
         self.tags = tags.copy() if tags is not None else []
         self._arc = Arcade()
 
@@ -120,10 +123,31 @@ class Swarm:
         return scorecard
 
     def open_scorecard(self) -> str:
+        if self.ROOT_URL != "https://three.arcprize.org":
+            response = self._session.post(
+                f"{self.ROOT_URL}/api/scorecard/open",
+                json={"tags": self.tags},
+            )
+            data = response.json()
+            if "error" in data:
+                logger.warning(data["error"])
+            return data["card_id"]
         return self._arc.open_scorecard(tags=self.tags)  # type: ignore[no-any-return]
 
     def close_scorecard(self, card_id: str) -> Optional[EnvironmentScorecard]:
         self.card_id = None
+        if self.ROOT_URL != "https://three.arcprize.org":
+            from .structs import Scorecard
+
+            response = self._session.post(
+                f"{self.ROOT_URL}/api/scorecard/close",
+                json={"card_id": card_id},
+            )
+            data = response.json()
+            if "error" in data:
+                logger.warning(data["error"])
+                return None
+            return Scorecard.model_validate(data)  # type: ignore[return-value]
 
         return self._arc.close_scorecard(card_id)
 
