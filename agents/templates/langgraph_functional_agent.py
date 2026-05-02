@@ -14,10 +14,10 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.func import entrypoint
 from langgraph.pregel import Pregel
 from langsmith.schemas import Attachment
-from openai import OpenAI
 from openai.types.chat import ChatCompletionMessage
 
-from agents.templates.llm_agents import LLM
+from agents.templates.llm_agents import LLM, OllamaEndpointMixin
+from agents.templates.openai_client import create_openai_client
 
 from ..agent import Agent
 
@@ -52,7 +52,7 @@ def build_agent(
 ) -> Pregel[State, entrypoint.final[ChatCompletionMessage, State]]:
     """Define the agent logic."""
     # Modify this code to add things like reasoning, planning, etc.
-    openai_client = OpenAI()
+    openai_client = create_openai_client()
     model_kwargs = {"reasoning_effort": reasoning_effort} if reasoning_effort else {}
 
     @ls.traceable(run_type="prompt")  # type: ignore[misc]
@@ -175,6 +175,18 @@ class LangGraphFunc(LLM, Agent):
 
 class LangGraphTextOnly(LangGraphFunc, Agent):
     USE_IMAGE = False
+
+
+class OllamaDeepSeekLangGraphFunc(OllamaEndpointMixin, LangGraphFunc):
+    """LangGraph function-calling agent backed by Ollama's deepseek-v4-flash model."""
+
+    MODEL = "deepseek-v4-flash"
+
+
+class OllamaDeepSeekLangGraphTextOnly(OllamaEndpointMixin, LangGraphTextOnly):
+    """Text-only LangGraph agent backed by Ollama's deepseek-v4-flash model."""
+
+    MODEL = "deepseek-v4-flash"
 
 
 def format_frame(latest_frame: FrameData, as_image: bool) -> list[dict[str, Any]]:

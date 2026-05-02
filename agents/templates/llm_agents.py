@@ -6,11 +6,22 @@ from typing import Any, Optional
 
 import openai
 from arcengine import FrameData, GameAction, GameState
-from openai import OpenAI as OpenAIClient
 
 from ..agent import Agent
+from .openai_client import create_openai_client
 
 logger = logging.getLogger()
+
+
+class OllamaEndpointMixin:
+    """Use the local Ollama OpenAI-compatible endpoint by default."""
+
+    MODEL = "deepseek-v4-flash"
+    MODEL_REQUIRES_TOOLS = True
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        os.environ.setdefault("OPENAI_PROVIDER", "ollama")
+        super().__init__(*args, **kwargs)
 
 
 class LLM(Agent):
@@ -60,7 +71,7 @@ class LLM(Agent):
         logging.getLogger("openai").setLevel(logging.CRITICAL)
         logging.getLogger("httpx").setLevel(logging.CRITICAL)
 
-        client = OpenAIClient(api_key=os.environ.get("OPENAI_API_KEY", ""))
+        client = create_openai_client()
 
         functions = self.build_functions()
         tools = self.build_tools()
@@ -400,6 +411,15 @@ Call exactly one action.
         super().cleanup(*args, **kwargs)
 
 
+class OllamaDeepSeekLLM(OllamaEndpointMixin, LLM):
+    """LLM agent that targets Ollama's deepseek-v4-flash model."""
+
+    MAX_ACTIONS = 80
+    MODEL = "deepseek-v4-flash"
+    DO_OBSERVATION = True
+    MODEL_REQUIRES_TOOLS = True
+
+
 class ReasoningLLM(LLM, Agent):
     """An LLM agent that uses o4-mini and captures reasoning metadata in the action.reasoning field."""
 
@@ -491,6 +511,14 @@ INT<0,15> values.
 Call exactly one action.
         """.format()
         )
+
+
+class OllamaDeepSeekFastLLM(OllamaEndpointMixin, FastLLM):
+    """Fast LLM agent that targets Ollama's deepseek-v4-flash model."""
+
+    MODEL = "deepseek-v4-flash"
+    DO_OBSERVATION = False
+    MODEL_REQUIRES_TOOLS = True
 
 
 class GuidedLLM(LLM, Agent):

@@ -14,7 +14,8 @@ from smolagents import (
     tool,
 )
 
-from agents.templates.llm_agents import LLM
+from agents.templates.llm_agents import LLM, OllamaEndpointMixin
+from agents.templates.openai_client import openai_server_model_kwargs
 
 from ..agent import Agent
 
@@ -36,7 +37,7 @@ class SmolCodingAgent(LLM, Agent):
     def main(self) -> None:
         """The main function to initialize the agent and play the game until finished."""
         self.timer = time.time()
-        model = OpenAIServerModel(self.MODEL)
+        model = OpenAIServerModel(self.MODEL, **openai_server_model_kwargs())
 
         # A CodeAgent calls and manipulates tools as Python functions which enables complex reasoning, algorithms etc.
         # Think BFS, DFS, A*, etc.
@@ -256,7 +257,7 @@ class SmolVisionAgent(LLM, Agent):
     def main(self) -> None:
         """The main agent loop. Play the game_id until finished, then exits."""
         self.timer = time.time()
-        model = OpenAIServerModel(self.MODEL)
+        model = OpenAIServerModel(self.MODEL, **openai_server_model_kwargs())
 
         agent = ToolCallingAgent(
             model=model,
@@ -474,3 +475,15 @@ Call exactly one action.
                 score=latest_frame.score,
             )
         )
+
+
+class OllamaDeepSeekSmolCodingAgent(OllamaEndpointMixin, SmolCodingAgent):
+    """smolagents coding agent backed by Ollama's deepseek-v4-flash model."""
+
+    MODEL = "deepseek-v4-flash"
+
+
+class OllamaDeepSeekSmolVisionAgent(OllamaEndpointMixin, SmolVisionAgent):
+    """smolagents vision agent backed by Ollama's deepseek-v4-flash model."""
+
+    MODEL = "deepseek-v4-flash"

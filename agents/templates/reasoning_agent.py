@@ -6,11 +6,11 @@ import textwrap
 from typing import Any, Dict, List, Literal
 
 from arcengine import FrameData, GameAction
-from openai import OpenAI
 from PIL import Image, ImageDraw, ImageFont
 from pydantic import BaseModel, Field
 
 from .llm_agents import ReasoningLLM
+from .openai_client import create_openai_client
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class ReasoningAgent(ReasoningLLM):
         self.history: List[ReasoningActionResponse] = []
         self.screen_history: List[bytes] = []
         self.max_screen_history = 10  # Limit screen history to prevent memory leak
-        self.client = OpenAI()
+        self.client = create_openai_client()
 
     def clear_history(self) -> None:
         """Clear all history when transitioning between levels."""
