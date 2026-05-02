@@ -5,9 +5,12 @@ Helpers for working with game frames.
 import base64
 import json
 from io import BytesIO
+from typing import TypeAlias
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+
+Coords: TypeAlias = tuple[tuple[float, float], tuple[float, float]]
 
 COLOR_PALETTE = {
     0: (0, 0, 0),  # Black
@@ -222,7 +225,7 @@ def render_frame(
 
 def add_highlight(
     draw: ImageDraw.ImageDraw,
-    coords: ImageDraw.Coords,
+    coords: Coords,
     label: str,
 ) -> None:
     (x1, y1), (x2, y2) = coords
