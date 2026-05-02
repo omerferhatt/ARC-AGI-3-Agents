@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from typing import Any, cast
 
@@ -25,7 +26,9 @@ class LangGraphThinking(Agent):
             "action": None,
             "context": [],
             "key_matches_door": False,
-            "llm": kwargs.get("llm", LLM.OPENAI_GPT_41),
+            "llm": kwargs.get(
+                "llm", LLM(os.environ.get("LANGGRAPH_LLM", LLM.OPENAI_GPT_41.value))
+            ),
             "thoughts": [],
             "frames": [],
             "latest_frame": None,

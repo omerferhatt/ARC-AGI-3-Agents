@@ -7,6 +7,8 @@ from langchain_core.messages import BaseMessage
 
 class LLM(Enum):
     OPENAI_GPT_41 = "openai:gpt-4.1"
+    OLLAMA_DEEPSEEK_V4_FLASH = "ollama:deepseek-v4-flash"
+    OLLAMA_LLAMA_3_2 = "ollama:llama3.2"
 
 
 class AgentState(TypedDict):
