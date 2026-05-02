@@ -42,13 +42,19 @@ ollama pull llama3.2
 Then configure your `.env`:
 
 ```bash
-OPENAI_BASE_URL=http://localhost:11434/v1
+LANGGRAPH_LLM=ollama:llama3.2
+OPENAI_BASE_URL=http://localhost:11434
 OPENAI_API_KEY=ollama
 ```
 
-Configure `agents/templates/langgraph_thinking/schema.py` and
-`agents/templates/langgraph_thinking/llm.py` when you want the thinking agent to
-use a specific local model.
+`OPENAI_API_KEY` defaults to `ollama` for Ollama-routed models when it is not
+set. To use Ollama's hosted OpenAI-compatible endpoint, set
+`OPENAI_BASE_URL=https://ollama.com/v1` and replace `OPENAI_API_KEY` with your
+Ollama API key.
+
+Available built-in Ollama values are defined in
+`agents/templates/langgraph_thinking/schema.py`, including
+`ollama:deepseek-v4-flash` and `ollama:llama3.2`.
 
 For more information, see the [documentation](https://three.arcprize.org/docs#quick-start) or the [tutorial video](https://youtu.be/xEVg9dcJMkw).
 
