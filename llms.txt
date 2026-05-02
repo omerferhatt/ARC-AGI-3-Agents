@@ -23,10 +23,10 @@ cp .env-example .env
 export ARC_API_KEY="your_api_key_here"
 ```
 
-4. Run the random agent against the locksmith game:
+4. Run the default LangGraph thinking agent against the locksmith game:
 
 ```bash
-uv run main.py --agent=random --game=locksmith
+uv run main.py --game=locksmith
 ```
 
 For more details see the full docs at <https://three.arcprize.org/docs>.
@@ -104,8 +104,8 @@ See the concise README in that folder or jump straight to the online docs → [A
 
 Ready-made templates live in [`agents/templates/`](https://github.com/arcprize/ARC-AGI-3-Agents/tree/main/agents/templates):
 
-• **Starter templates** – random agents, basic LLM agents, guided & reasoning agents.
-• **Third-party integrations** – HuggingFace *smolagents*, AgentOps tracing & reasoning agent, LangChain/LangGraph agents.
+• **Starter template** – the LangGraph thinking agent.
+• **Third-party integrations** – AgentOps tracing plus OpenAI-compatible LangGraph model calls.
 
 Browse them on GitHub or read the docs:
 - Standard templates: <https://three.arcprize.org/docs#building-agents>

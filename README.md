@@ -23,15 +23,15 @@ cp .env.example .env
 export ARC_API_KEY="your_api_key_here"
 ```
 
-4. Run the random agent (generates random actions) against the ls20 game.
+4. Run the default LangGraph thinking agent against the ls20 game.
 
 ```bash
-uv run main.py --agent=random --game=ls20
+uv run main.py --game=ls20
 ```
 
-### Using Ollama for LLM agents
+### Using Ollama for LangGraph agents
 
-The OpenAI-based templates can target any OpenAI-compatible endpoint. For Ollama,
+The LangGraph templates can target any OpenAI-compatible endpoint. For Ollama,
 start Ollama and pull a model:
 
 ```bash
@@ -46,18 +46,9 @@ OPENAI_BASE_URL=http://localhost:11434/v1
 OPENAI_API_KEY=ollama
 ```
 
-Set the agent template's `MODEL` to the Ollama model name, such as `llama3.2`.
-You can also set `OPENAI_PROVIDER=ollama` instead of `OPENAI_BASE_URL` to use
-the default local endpoint.
-
-This repo also includes ready-made Ollama agents for `deepseek-v4-flash`:
-
-```bash
-uv run main.py --agent=ollamadeepseekllm --game=ls20
-uv run main.py --agent=ollamadeepseekfastllm --game=ls20
-uv run main.py --agent=ollamadeepseeksmolcodingagent --game=ls20
-uv run main.py --agent=ollamadeepseeklanggraphtextonly --game=ls20
-```
+Configure `agents/templates/langgraph_thinking/schema.py` and
+`agents/templates/langgraph_thinking/llm.py` when you want the thinking agent to
+use a specific local model.
 
 For more information, see the [documentation](https://three.arcprize.org/docs#quick-start) or the [tutorial video](https://youtu.be/xEVg9dcJMkw).
 
