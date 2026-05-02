@@ -55,14 +55,6 @@ def create_openai_client(api_key_env: str = "OPENAI_API_KEY") -> OpenAI:
     return OpenAI(**kwargs)
 
 
-def openai_server_model_kwargs(api_key_env: str = "OPENAI_API_KEY") -> dict[str, Any]:
-    """Return kwargs for smolagents.OpenAIServerModel."""
-    kwargs: dict[str, Any] = {"api_key": get_openai_api_key(api_key_env)}
-    if base_url := get_openai_base_url():
-        kwargs["api_base"] = base_url
-    return kwargs
-
-
 def chat_openai_kwargs() -> dict[str, Any]:
     """Return kwargs for langchain_openai.ChatOpenAI."""
     kwargs: dict[str, Any] = {"api_key": get_openai_api_key()}

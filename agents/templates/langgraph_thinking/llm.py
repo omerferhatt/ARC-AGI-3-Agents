@@ -1,7 +1,7 @@
 from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 
-from agents.templates.openai_client import chat_openai_kwargs
+from agents.openai_client import chat_openai_kwargs
 
 from .schema import LLM
 

@@ -93,7 +93,8 @@ def main() -> None:
         "-a",
         "--agent",
         choices=AVAILABLE_AGENTS.keys(),
-        help="Choose which agent to run.",
+        default="langgraphthinking",
+        help="Choose which agent to run. Defaults to langgraphthinking.",
     )
     parser.add_argument(
         "-g",
@@ -109,10 +110,6 @@ def main() -> None:
     )
 
     args = parser.parse_args()
-
-    if not args.agent:
-        logger.error("An Agent must be specified")
-        return
 
     print(f"{ROOT_URL}/api/games")
 
